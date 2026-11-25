@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACCFIN AI – Concept Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f2547;--navy2:#183767;--ink:#14213a;--mute:#5d6b82;--line:#dfe4ec;--bg:#f2f4f8;--card:#fff;--blue:#2d6cdf;--green:#1f8f5f;--amber:#b7791f;--red:#c0392b;--sel:#e8eefb}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;display:flex}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+aside{width:232px;background:var(--navy);color:#cdd7ea;padding:18px 12px;display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.brand{color:#fff;font-weight:600;font-size:18px;padding:4px 10px 16px;letter-spacing:.2px}
+.brand small{display:block;font-weight:400;font-size:11.5px;color:#92a4c6;margin-top:2px}
+.nav{background:none;border:0;color:inherit;text-align:left;padding:9px 10px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
+.nav:hover{background:var(--navy2)}
+.nav.on{background:#fff;color:var(--navy);font-weight:500}
+.nav i{font-style:normal;font-size:11px;background:#e5b84b;color:#3b2a00;border-radius:9px;padding:1px 7px}
+.grp{font-size:12px;color:#7f93b8;padding:14px 10px 4px}
+.role{margin-top:auto;background:var(--navy2);border-radius:8px;padding:10px;font-size:12.5px}
+.role select{width:100%;margin-top:6px;padding:6px;border-radius:5px;border:0;font:inherit}
+main{flex:1;min-width:0;display:flex;flex-direction:column;height:100vh;overflow:auto}
+.banner{background:#fff7e0;border-bottom:1px solid #ecd9a0;color:#6b5200;padding:7px 24px;font-size:12.5px}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px 6px}
+h1{font-size:21px;font-weight:600}
+.sub{color:var(--mute);font-size:13px;margin-top:2px}
+.pad{padding:12px 24px 28px}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:10px}
+.kpi b{display:block;font-size:24px;font-weight:600;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--mute);font-size:12.5px}
+.up{color:var(--green)}.dn{color:var(--red)}
+.cols{grid-template-columns:2fr 1fr}
+.cols2{grid-template-columns:1fr 1fr}
+@media(max-width:980px){.cols,.cols2{grid-template-columns:1fr}}
+@media(max-width:760px){aside{display:none}}
+.cmd{background:var(--navy);color:#fff;border:0}
+.cmd h3{color:#fff}
+.cmd textarea{width:100%;background:#fff;color:var(--ink);border:0;border-radius:6px;padding:11px;font:inherit;resize:none;height:62px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:6px;padding:8px 14px;font-weight:500}
+.btn.ghost{background:transparent;border:1px solid #fff5;color:#fff}
+.btn.line{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ok{background:var(--green)}.btn.no{background:#fff;color:var(--red);border:1px solid #e8c1bb}
+.chip{border:1px solid #fff4;background:transparent;color:#dbe5f7;border-radius:14px;padding:4px 11px;font-size:12.5px}
+.chip:hover{background:#ffffff1c}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:500;color:var(--mute);padding:8px;border-bottom:1px solid var(--line)}
+td{padding:9px 8px;border-bottom:1px solid #eef1f6;vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+.wrap{overflow-x:auto}
+.tag{font-size:11.5px;border-radius:4px;padding:2px 7px;white-space:nowrap;display:inline-block}
+.t-ex{background:#e8eefb;color:#1c4fa8}.t-ca{background:#e6f4ee;color:#16704a}.t-ai{background:#fdf1d8;color:#8a5a0b}.t-ok{background:#1f8f5f;color:#fff}.t-rv{background:#fbe7e4;color:#a3281b}
+.steps{list-style:none;padding:0;display:grid;gap:8px}
+.steps li{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:start;padding:8px 0;border-bottom:1px solid #eef1f6}
+.dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);margin-top:2px}
+.s-run .dot{border-color:var(--blue);border-top-color:transparent;animation:sp .8s linear infinite}
+.s-done .dot{background:var(--green);border-color:var(--green)}
+.s-warn .dot{background:var(--amber);border-color:var(--amber)}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.s-run .dot{animation:none}}
+.agent{color:var(--mute);font-size:12px}
+.drop{border:1.5px dashed #ffffff66;border-radius:6px;padding:10px;font-size:13px;color:#cfdaf0;margin-top:10px}
+.bar{height:8px;background:#e9edf4;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mute);margin-bottom:10px}
+.hide{display:none}
+ul.plain{list-style:none;padding:0;display:grid;gap:9px}
+ul.plain li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eef1f6;padding-bottom:8px}
+.stage{display:grid;gap:8px}
+.stage div{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:6px;padding:9px 12px;background:#fff}
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">ACCFIN AI<small>Your accounting department in one place</small></div>
+  <button class="nav on" data-v="dash">Dashboard</button>
+  <button class="nav" data-v="work">AI Workspace</button>
+  <button class="nav" data-v="appr">Approvals <i id="pc">5</i></button>
+  <div class="grp">Accounting</div>
+  <button class="nav" data-v="soon">Ledger and journals</button>
+  <button class="nav" data-v="soon">Bank reconciliation</button>
+  <button class="nav" data-v="soon">Payables and receivables</button>
+  <button class="nav" data-v="soon">Tax and VAT</button>
+  <button class="nav" data-v="soon">Payroll</button>
+  <div class="grp">Insight and control</div>
+  <button class="nav" data-v="soon">Reports</button>
+  <button class="nav" data-v="soon">Audit tools</button>
+  <button class="nav" data-v="soon">Documents</button>
+  <div class="role">Viewing as
+    <select id="role" aria-label="Role"><option>Accounts Officer</option><option>Senior Accountant</option><option>Chartered Accountant</option><option>Auditor</option><option>CFO</option></select>
+  </div>
+</aside>
+<main>
+  <div class="banner">Concept demo. All companies, figures and documents are fictional and the AI steps are simulated. Nothing is sent anywhere.</div>
+
+  <!-- DASHBOARD -->
+  <section id="dash">
+    <header><div><h1>Good morning, Rahim</h1><div class="sub">Northwind Traders Ltd · November 2026</div></div><button class="btn line" onclick="go('work')">Open AI Workspace</button></header>
+    <div class="pad grid">
+      <div class="card cmd">
+        <h3>What should ACCFIN AI do today?</h3>
+        <textarea id="q1" aria-label="Task">Process these supplier invoices, prepare journal entries and generate an expense summary.</textarea>
+        <div class="row"><button class="btn" onclick="start('q1')">Start task</button>
+          <button class="chip" onclick="setq('q1','Reconcile the October bank statement with the ledger.')">Reconcile bank statement</button>
+          <button class="chip" onclick="setq('q1','Prepare the monthly profit and loss statement.')">Monthly P&amp;L</button>
+          <button class="chip" onclick="setq('q1','Analyze the financial ratios of this company.')">Ratio analysis</button></div>
+      </div>
+      <div class="grid kpis">
+        <div class="card kpi"><span>Income, November</span><b>৳ 4,820,000</b><span class="up">+8.4% vs October</span></div>
+        <div class="card kpi"><span>Expenses, November</span><b>৳ 3,310,500</b><span class="dn">+3.1% vs October</span></div>
+        <div class="card kpi"><span>Cash and bank</span><b>৳ 2,146,300</b><span>3 accounts</span></div>
+        <div class="card kpi"><span>Receivables</span><b>৳ 1,890,000</b><span>৳ 412,000 overdue</span></div>
+        <div class="card kpi"><span>Payables</span><b>৳ 1,264,750</b><span>6 bills due this week</span></div>
+      </div>
+      <div class="grid cols">
+        <div class="card"><h3>Income and expenses, last 6 months</h3>
+          <svg viewBox="0 0 520 190" width="100%" role="img" aria-label="Bar chart of income and expenses for six months">
+            <g stroke="#e6eaf1"><line x1="40" x2="510" y1="30" y2="30"/><line x1="40" x2="510" y1="80" y2="80"/><line x1="40" x2="510" y1="130" y2="130"/><line x1="40" x2="510" y1="165" y2="165" stroke="#b9c3d4"/></g>
+            <g font-size="11" fill="#5d6b82"><text x="4" y="34">5M</text><text x="4" y="84">3.5M</text><text x="4" y="134">2M</text></g>
+            <g id="bars"></g>
+          </svg>
+          <div class="legend"><span>■ <span style="color:#183767">Income</span></span><span>■ <span style="color:#9db7e6">Expenses</span></span></div>
+        </div>
+        <div class="card"><h3>Needs your attention</h3>
+          <ul class="plain">
+            <li><span>5 drafts waiting for approval</span><a href="#" onclick="go('appr');return false">Review</a></li>
+            <li><span>Bank reconciliation: 7 unmatched items</span><span class="tag t-ai">Draft</span></li>
+            <li><span>12 documents not yet processed</span><span class="tag t-rv">Open</span></li>
+            <li><span>VAT return due in 9 days</span><span class="tag t-ai">Prepare</span></li>
+            <li><span>Possible duplicate: INV-2291 (Delta Packaging)</span><span class="tag t-rv">Check</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card"><h3>AI insights</h3>
+        <ul class="plain">
+          <li><span>Packaging costs rose 14% while sales volume rose 6%. Two supplier price changes explain most of the gap.</span><span class="tag t-ai">AI suggestion</span></li>
+          <li><span>Current ratio is 1.62, up from 1.48 last quarter.</span><span class="tag t-ca">Calculated</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKSPACE -->
+  <section id="work" class="hide">
+    <header><div><h1>ACCFIN AI Workspace</h1><div class="sub">Give an instruction or upload files. You see every step and approve before anything is saved.</div></div></header>
+    <div class="pad grid cols">
+      <div class="grid">
+        <div class="card cmd">
+          <h3>Your instruction</h3>
+          <textarea id="q2" aria-label="Instruction">Process these supplier invoices, prepare journal entries, update accounts payable and generate an expense summary.</textarea>
+          <div class="drop">Drop files here or choose files: 45 sample invoices attached (fictional)</div>
+          <div class="row"><button class="btn" id="runbtn" onclick="start('q2')">Run task</button><button class="btn ghost" onclick="reset()">Clear</button></div>
+        </div>
+        <div class="card"><h3>Progress</h3>
+          <div class="bar" aria-hidden="true"><i id="pb" style="width:0"></i></div>
+          <ul class="steps" id="steps"></ul>
+          <div id="result" class="hide" style="margin-top:12px">
+            <b>Waiting for your approval.</b> <span class="sub">Nothing has been saved to the ledger yet.</span>
+            <div class="row"><button class="btn" onclick="go('appr')">Review 5 drafts</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid" style="align-content:start">
+        <div class="card"><h3>How results are labelled</h3>
+          <ul class="plain">
+            <li><span>Read directly from a document</span><span class="tag t-ex">Extracted</span></li>
+            <li><span>Computed and rechecked by the system</span><span class="tag t-ca">Calculated</span></li>
+            <li><span>Proposed by AI, still a draft</span><span class="tag t-ai">AI suggestion</span></li>
+            <li><span>Authorized by a person</span><span class="tag t-ok">Approved</span></li>
+          </ul>
+        </div>
+        <div class="card"><h3>Agents working for you</h3>
+          <div class="agent">The central AI picks the right agents automatically. You never need to select one.</div>
+          <ul class="plain" style="margin-top:10px"><li><span>Document Intelligence</span><span class="agent">reads files</span></li><li><span>Invoice Processing</span><span class="agent">checks duplicates</span></li><li><span>Journal Entry</span><span class="agent">drafts entries</span></li><li><span>Accounts Payable</span><span class="agent">updates after approval</span></li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROVALS -->
+  <section id="appr" class="hide">
+    <header><div><h1>Approvals</h1><div class="sub">Draft journal entries from the invoice task. Each one links to its source document.</div></div></header>
+    <div class="pad grid">
+      <div class="card"><div class="wrap">
+        <table><thead><tr><th>Source</th><th>Supplier</th><th>Debit account</th><th>Credit account</th><th class="n">Amount (৳)</th><th>Status</th><th></th></tr></thead>
+        <tbody id="rows"></tbody></table></div>
+        <div class="row"><span class="sub">Debits equal credits for every draft: <span class="tag t-ca">Calculated</span></span><button class="btn ok" onclick="approveAll()">Approve all valid drafts</button></div>
+      </div>
+      <div class="card"><h3>Exceptions</h3>
+        <ul class="plain">
+          <li><span>INV-2291, Delta Packaging: same number and amount as INV-2291 dated 3 Nov. Not drafted.</span><span class="tag t-rv">Needs review</span></li>
+          <li><span>SCAN-014: total unreadable. Please check the original image.</span><span class="tag t-rv">Needs review</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMING LATER -->
+  <section id="soon" class="hide">
+    <header><div><h1>Planned modules</h1><div class="sub">These areas are built in later stages. The demo shows the first stage only.</div></div></header>
+    <div class="pad"><div class="stage">
+      <div><span>Stage 1: Dashboard, navigation and AI workspace</span><span class="tag t-ca">In this demo</span></div>
+      <div><span>Stage 2: Document processing, OCR and invoice automation</span><span class="tag t-ai">Planned</span></div>
+      <div><span>Stage 3: Journals, general ledger and trial balance</span><span class="tag t-ai">Planned</span></div>
+      <div><span>Stage 4: Bank reconciliation, payables and receivables</span><span class="tag t-ai">Planned</span></div>
+      <div><span>Stage 5: VAT, tax, payroll and compliance</span><span class="tag t-ai">Planned</span></div>
+      <div><span>Stage 6 to 9: Reporting, audit tools, workflows, security and testing</span><span class="tag t-ai">Planned</span></div>
+    </div></div>
+  </section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const views=['dash','work','appr','soon'];
+function go(v){views.forEach(x=>$(x).classList.toggle('hide',x!==v));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.v===v&&(v!=='soon'||b===window._soonBtn)));}
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{window._soonBtn=b;go(b.dataset.v)});
+function setq(id,t){$(id).value=t}
+// chart
+(function(){const m=['Jun','Jul','Aug','Sep','Oct','Nov'],inc=[3.9,4.1,4.3,4.4,4.45,4.82],exp=[2.9,3.0,3.2,3.1,3.21,3.31];let h='';
+m.forEach((l,i)=>{const x=60+i*78,y=a=>165-a*27;h+=`<rect x="${x}" y="${y(inc[i])}" width="24" height="${inc[i]*27}" fill="#183767"/><rect x="${x+27}" y="${y(exp[i])}" width="24" height="${exp[i]*27}" fill="#9db7e6"/><text x="${x+10}" y="182" font-size="11" fill="#5d6b82">${l}</text>`});$('bars').innerHTML=h})();
+// approvals data (fictional)
+const drafts=[
+['INV-2288','Harbor Stationery','Office supplies','Accounts payable',18400],
+['INV-2290','Metro Logistics','Freight and delivery','Accounts payable',62750],
+['INV-2293','Brightline Power','Utilities','Accounts payable',41200],
+['INV-2297','Apex IT Services','Software subscriptions','Accounts payable',95000],
+['INV-2301','Delta Packaging','Packaging materials','Accounts payable',138600]];
+const st=drafts.map(()=> 'draft');
+function render(){$('rows').innerHTML=drafts.map((d,i)=>`<tr><td><span class="tag t-ex">Extracted</span><br>${d[0]}</td><td>${d[1]}</td><td><span class="tag t-ai">AI suggestion</span><br>${d[2]}</td><td>${d[3]}</td><td class="n">${d[4].toLocaleString('en-US')}</td><td>${st[i]==='ok'?'<span class="tag t-ok">Approved</span>':st[i]==='no'?'<span class="tag t-rv">Rejected</span>':'<span class="tag t-ai">Draft</span>'}</td><td>${st[i]==='draft'?`<button class="btn ok" onclick="setS(${i},'ok')">Approve</button> <button class="btn no" onclick="setS(${i},'no')">Reject</button>`:''}</td></tr>`).join('');
+const p=st.filter(s=>s==='draft').length;$('pc').textContent=p;$('pc').style.display=p?'':'none'}
+function setS(i,v){st[i]=v;render()}
+function approveAll(){st.forEach((s,i)=>{if(s==='draft')st[i]='ok'});render()}
+render();
+// simulated run
+const plan=[['Read 45 documents','Document Intelligence',900,'done'],['Extracted suppliers, dates, amounts and tax','Document Intelligence',900,'done'],['Checked for duplicates: 1 possible duplicate found','Invoice Processing',800,'warn'],['2 documents need manual review','Invoice Processing',700,'warn'],['Drafted 43 journal entries','Journal Entry',900,'done'],['Checked that debits equal credits','Journal Entry',700,'done'],['Prepared expense summary','Financial Reporting',800,'done'],['Accounts payable will update after your approval','Accounts Payable',400,'warn']];
+let timer=null;
+function reset(){clearTimeout(timer);$('steps').innerHTML='';$('pb').style.width='0';$('result').classList.add('hide');$('runbtn').disabled=false}
+function start(src){go('work');$('q2').value=$(src).value;reset();$('runbtn').disabled=true;let i=0;
+ (function next(){ if(i>=plan.length){$('pb').style.width='100%';$('result').classList.remove('hide');$('runbtn').disabled=false;return}
+  const p=plan[i],li=document.createElement('li');li.className='s-run';li.innerHTML=`<span class="dot"></span><span>${p[0]}</span><span class="agent">${p[1]}</span>`;$('steps').appendChild(li);
+  timer=setTimeout(()=>{li.className='s-'+p[3];i++;$('pb').style.width=Math.round(i/plan.length*100)+'%';next()},p[2])})()}
+</script>
+</body>
+</html>
